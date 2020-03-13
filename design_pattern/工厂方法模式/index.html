@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 安全模式创建的工厂
+        var Factory = function(type,content) {
+            if (this instanceof Factory) {
+                var s = new this[type](content);
+                return s;
+            } else {
+                return new Factory('type', content)
+            }
+        }
+        // 工厂类型中设置创建所有类型数据对象的基类
+        Factory.prototype = {
+            Java: function(){},
+            Javascript: function(){}, 
+            UI: function(){},
+            PHP: function(){},
+        }
+    </script>
+</body>
+</html>

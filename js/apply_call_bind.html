@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // apply call 为了改变某个函数运行时的上下文,换句话说就是为了改变函数内部this的指向
+        function fruits() {}
+        fruits.prototype = {
+            color: 'red',
+            say: function () {
+                console.log('my color is ' + this.color)
+            }
+        }
+        var apple = new fruits()
+        apple.say();
+
+        banana = {
+            color: 'yellow'
+        }
+        apple.say.call(banana)
+
+        // apply call 区别
+        // func.call(this, arg1,arg2)
+        // func.call(this, [arg1, arg2])
+
+        
+    </script>
+</body>
+</html>

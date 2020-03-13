@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DragDrop</title>
+    <script type="text/javascript" src="EventUtil.js"></script>
+</head>
+<body>
+    <div id="status"></div>
+    <div id="myDiv1" class="draggable" style="background:red;width:100px;height:100px;position:absolute"></div>
+    <div id="myDiv2" class="draggable" style="background:blue;width:100px;height:100px;position:absolute;left:100px"></div>
+    <script>
+        function EventTarget() {
+            this.handlers = {};
+        }
+        EventTarget.prototype = {
+            constructor: EventTarget,
+            addHandler: function(type,handler) {
+                if(typeof this.handlers[type] == "undefined"){
+                    this.handlers[type] = []
+                }
+                this.handlers[type].push(handler);
+            },
+            fire: function(event) {
+                if (!event.target) {
+                    event.target = this;
+                }
+                if (this.handlers[event.type] instanceof Array) {
+                    var handlers = this.handlers[event.type];
+                    for (let index = 0; index < handlers.length; index++) {
+                        handlers[index](event)
+                    }
+                }
+            },
+            removeHandler: function(type,handler) {
+                if (this.handlers[type] instanceof Array) {
+                    var handlers = this.handlers[type];
+                    for (let index = 0; index < handlers.length; index++) {
+                       if (handlers[index] === handler) {
+                           break;
+                       } 
+                    }
+                    handlers.splice(i,1)
+                }
+            }
+        }
+
+        function handleMessage(event) {
+            alert("Message received " + event.message);
+        }
+        // var target = new EventTarget();
+        // target.addHandler('message',handleMessage);
+        // target.fire({type: 'message',message: 'hello world'});
+
+        var DragDrop = function() {
+            var dragdrop = new EventTarget();
+            var dragging = null;
+            var diffX = 0;
+            var diffY = 0;
+            function handleEvent(event) {
+                event = EventUtil.getEvent(event);
+                var target = EventUtil.getTarget(event);
+                // 确定事件类型
+                switch (event.type) {
+                    case 'mousedown':
+                        if (target.className.indexOf('draggable') > -1) {
+                            dragging = target;
+                            diffX = event.clientX - target.offsetLeft;
+                            diffY = event.clientY - target.offsetTop;
+                            dragdrop.fire({type: 'dragstart',target: dragging,x: event.clientY, y: event.clientY});
+                        }
+                        break;
+                    case 'mousemove':
+                        if (dragging != null) {
+                            dragging.style.left = (event.clientX-diffX) + 'px';
+                            dragging.style.top = (event.clientY-diffY) + 'px';
+                            dragdrop.fire({type: 'dragend', target: dragging, x: event.clientX, y: event.clientY});
+                        }
+                        break;
+                    case 'mouseup':
+                        dragdrop.fire({type: 'drag', target: dragging, x: event.clientX, y: event.clientY})
+                        dragging = null;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            
+            dragdrop.enable = function() {
+                EventUtil.addHandler(document,'mousedown',handleEvent);
+                EventUtil.addHandler(document,'mousemove',handleEvent);
+                EventUtil.addHandler(document,'mouseup',handleEvent);
+            },
+            dragdrop.disable = function() {
+                EventUtil.removeHandler(document,'mousedown',handleEvent);
+                EventUtil.removeHandler(document,'mousemove',handleEvent);
+                EventUtil.removeHandler(document,'mouseup',handleEvent);
+            }
+            return dragdrop;
+        }();
+        DragDrop.enable();
+        DragDrop.addHandler('dragstart',function(){
+            var status = document.getElementById('status');
+            status.innerHTML = "started dragging " + event.target.id;
+        });
+        DragDrop.addHandler('drag',function(){
+            var status = document.getElementById('status');
+            status.innerHTML = "<br>started dragging " + event.target.id + " to (" + event.x + "," + event.y + ")";
+
+        });
+        DragDrop.addHandler('dragstart',function(){
+            var status = document.getElementById('status');
+            status.innerHTML = "<br>started dragging " + event.target.id + " at (" + event.x + "," + event.y + ")";
+        });
+    </script>
+</body>
+</html>

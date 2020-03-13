@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+
+      main {
+          margin: 20px 0;
+          padding: 10px;
+      }
+      main div {
+          background:  black;
+          color: white;
+          padding: 15px;
+          max-width: 125px;
+          margin: 5;
+      }
+      .inline-block-center {
+          text-align: center;
+      }
+      .inline-block-center div {
+          display: inline-block;
+          text-align: left;
+      }
+      .flex-center {
+          display: flex;
+          justify-content: center;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="inline-block-center">
+      <div>
+        I'm an element that is block-like with my siblings and we're centered in
+        a row.
+      </div>
+      <div>
+        I'm an element that is block-like with my siblings and we're centered in
+        a row. I have more content in me than my siblings do.
+      </div>
+      <div>
+        I'm an element that is block-like with my siblings and we're centered in
+        a row.
+      </div>
+    </main>
+
+    <main class="flex-center">
+      <div>
+        I'm an element that is block-like with my siblings and we're centered in
+        a row.
+      </div>
+      <div>
+        I'm an element that is block-like with my siblings and we're centered in
+        a row. I have more content in me than my siblings do.
+      </div>
+      <div>
+        I'm an element that is block-like with my siblings and we're centered in
+        a row.
+      </div>
+    </main>
+  </body>
+</html>
